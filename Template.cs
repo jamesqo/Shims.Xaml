@@ -1,4 +1,4 @@
 namespace $NAMESPACE
 {
-    public static class $CLASS { }
+    public static class ShimClass { }
 }
