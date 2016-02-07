@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1BD29BBE-06BF-47CD-BD85-CB287740218F}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Shims.Xaml", "src\Shims.Xaml.xproj", "{78BAA036-11B1-4EDA-8915-9C7F2759161B}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Shims.Xaml", "src\Shims.Xaml.xproj", "{A3E9DD90-A883-42A8-B27A-4FB8E1060FBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,15 +11,12 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{78BAA036-11B1-4EDA-8915-9C7F2759161B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78BAA036-11B1-4EDA-8915-9C7F2759161B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{78BAA036-11B1-4EDA-8915-9C7F2759161B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{78BAA036-11B1-4EDA-8915-9C7F2759161B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3E9DD90-A883-42A8-B27A-4FB8E1060FBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3E9DD90-A883-42A8-B27A-4FB8E1060FBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3E9DD90-A883-42A8-B27A-4FB8E1060FBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3E9DD90-A883-42A8-B27A-4FB8E1060FBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{78BAA036-11B1-4EDA-8915-9C7F2759161B} = {1BD29BBE-06BF-47CD-BD85-CB287740218F}
 	EndGlobalSection
 EndGlobal
