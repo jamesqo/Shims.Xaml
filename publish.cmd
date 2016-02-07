@@ -22,5 +22,6 @@ cd "%bin%"
 for /d %%d in (*) do (
     cd "%%d\Release"
     "%nuget%" push *.nupkg
+    del /q *.nupkg > nul
     cd "%bin%"
 )
