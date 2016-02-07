@@ -104,7 +104,7 @@ $namespaces = $assemblies | % `
 # Filter out the namespaces we don't need
 $namespaces = Filter-Namespaces $namespaces
 
-$directory = 'src/bin'
+$directory = 'bin/shims'
 mkdir -f $directory | Out-Null
 
 foreach ($namespace in $namespaces)
