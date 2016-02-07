@@ -1,4 +1,5 @@
 ﻿{
+	"title": "Shims.Xaml",
 	"version": "1.3.0",
 	"description": "Shims.Xaml lets you easily create libraries that work on WPF and Windows 10.\n\nFind us on GitHub at http://github.com/jamesqo/Shims.Xaml",
 	"authors": [ "James Ko" ],
