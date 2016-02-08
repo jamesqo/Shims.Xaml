@@ -66,7 +66,8 @@ function Add-CecilReference
     
     if (Test-Path $assemblyPath)
     {
-        # Already added the ref, nothing to do here
+        # Already downloaded it from a previous script run/function call
+        Add-Type -Path $assemblyPath
         return
     }
     
