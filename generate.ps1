@@ -49,13 +49,13 @@ function Load-Assembly($assembly)
     
     try
     {
-        # Load it! (winmd)
-        $assemblyObject = $assemblyClass::ReflectionOnlyLoadFrom($assembly)
+        # Load it! (plain old dlls)
+        $assemblyObject = $assemblyClass::LoadFrom($assembly)
     }
     catch
     {
-        # Load it again! (regular dlls)
-        $assemblyObject = $assemblyClass::LoadFrom($assembly)
+        # Load it again! (winmd components)
+        $assemblyObject = $assemblyClass::ReflectionOnlyLoadFrom($assembly)
     }
     
     # Deregister the handlers
