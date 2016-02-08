@@ -1,9 +1,14 @@
+function Get-FirstChild($directory)
+{
+    return gci $directory | % FullName | sort -Descending | select -Index 0
+}
+
 function Get-WpfAssemblies
 {
     $names = 'PresentationCore', 'PresentationFramework', 'System.Xaml', 'WindowsBase'
     $programFiles = ${env:ProgramFiles(x86)}
     $base = $programFiles, 'Reference Assemblies', 'Microsoft', 'Framework', '.NETFramework' -Join '\'
-    $latest = gci $base | % FullName | sort -Descending | select -Index 0
+    $latest = Get-FirstChild $base
     return $names | % `
     {
         Join-Path $latest "$_.dll"
@@ -15,7 +20,7 @@ function Get-UwpAssembly
     $name = 'Windows.Foundation.UniversalApiContract'
     $programFiles = ${env:ProgramFiles(x86)}
     $directory = $programFiles, 'Windows Kits', '10', 'References', $name -Join '\'
-    $latest = gci $directory | % FullName | sort -Descending | select -Index 0
+    $latest = Get-FirstChild $directory
     return Join-Path $latest "$name.winmd"
 }
 
@@ -75,7 +80,7 @@ function Add-CecilReference
 cd $PSScriptRoot
 
 $assemblies = @()
-$assemblies += Get-WpfAssemblies
+$assemblies += Get-WpfAssemblies # PowerShell does array unrolling here, so this isn't a typo
 $assemblies += Get-UwpAssembly
 
 $template = gc 'Template.cs'
@@ -93,7 +98,7 @@ mkdir -f $directory | Out-Null
 foreach ($namespace in $namespaces)
 {
     $contents = $template -Replace '\$NAMESPACE', $namespace # -Replace uses regex, so escape the $
-    $file = "$directory/$namespace.cs"
+    $file = Join-Path $directory "$namespace.cs"
     echo $contents > $file
 }
 
