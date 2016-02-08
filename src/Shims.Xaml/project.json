@@ -7,10 +7,6 @@
 	"projectUrl": "http://github.com/jamesqo/Shims.Xaml",
 	"licenseUrl": "http://github.com/jamesqo/Shims.Xaml/blob/master/LICENSE",
 
-	"compilationOptions": {
-		"optimize": true
-	},
-
 	"compile": "../../bin/shims/*.cs",
 
 	"frameworks": {
