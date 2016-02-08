@@ -47,4 +47,5 @@ goto :eof
 :args_done
 
 cd "%~dp0"
+dnu restore
 msbuild /p:Configuration="%config%" /p:Platform="%platform%"
