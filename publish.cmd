@@ -21,7 +21,8 @@ set "bin=%~dp0artifacts\bin"
 cd "%bin%"
 for /d %%d in (*) do (
     cd "%%d\Release"
-    "%nuget%" push %%d.nupkg
+    del /q *.symbols.nupkg
+    "%nuget%" push *.nupkg
     del /q *.nupkg > nul
     cd "%bin%"
 )
