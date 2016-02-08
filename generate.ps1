@@ -19,60 +19,12 @@ function Get-UwpAssembly
     return Join-Path $latest "$name.winmd"
 }
 
-
-function Load-Assembly($assembly)
-{
-    $assemblyClass = [Reflection.Assembly]
-    $winmdClass = [Runtime.InteropServices.WindowsRuntime.WindowsRuntimeMetadata]
-    $domain = [AppDomain]::CurrentDomain
-    
-    # Since desktop .NET can't work with winmd files,
-    # we have to use the reflection-only APIs and preload
-    # all the dependencies manually.
-    $appDomainHandler =
-    {
-        Param($sender, $e)
-        $assemblyClass::ReflectionOnlyLoad($e.Name)
-    }
-    
-    $winmdHandler =
-    {
-        Param($sender, $e)
-        [string[]] $empty = @()
-        $path = $winmdClass::ResolveNamespace($e.NamespaceName, $empty) | select -Index 0
-        $e.ResolvedAssemblies.Add($assemblyClass::ReflectionOnlyLoadFrom($path))
-    }
-    
-    try
-    {
-        # Load it! (plain old dlls)
-        return $assemblyClass::LoadFrom($assembly)
-    }
-    catch
-    {
-        # Hook up the handlers
-        $domain.add_ReflectionOnlyAssemblyResolve($appDomainHandler)
-        $winmdClass::add_ReflectionOnlyNamespaceResolve($winmdHandler)
-        
-        try
-        {
-            # Load it again! (winmd components)
-            return $assemblyClass::ReflectionOnlyLoadFrom($assembly)
-        }
-        finally
-        {
-            # Deregister the handlers
-            $domain.remove_ReflectionOnlyAssemblyResolve($appDomainHandler)
-            $winmdClass::remove_ReflectionOnlyNamespaceResolve($winmdHandler)
-        }
-    }
-}
-
 function Get-Namespaces($assembly)
 {
-    $loaded = Load-Assembly $assembly
-    $types = $loaded.GetTypes()
-    return $types | ? IsPublic | select -ExpandProperty Namespace -Unique
+    Add-CecilReference
+    $moduleDefinition = [Mono.Cecil.ModuleDefinition]
+    $module = $moduleDefinition::ReadModule($assembly)
+    return $module.Types | ? IsPublic | % Namespace | select -Unique
 }
 
 function Filter-Namespaces($namespaces)
@@ -90,6 +42,34 @@ function Filter-Namespaces($namespaces)
         
         $filtered.Length -eq 0
     }
+}
+
+function Extract-Nupkg($nupkg, $out)
+{
+    Add-Type -AssemblyName 'System.IO.Compression.FileSystem' # PowerShell lacks native support for zip
+    
+    $zipFile = [IO.Compression.ZipFile]
+    $zipFile::ExtractToDirectory($nupkg, $out)
+}
+
+function Add-CecilReference
+{
+    $url = 'https://www.nuget.org/api/v2/package/Mono.Cecil'
+    $directory = $PSScriptRoot, 'bin', 'Mono.Cecil' -Join '\'
+    $nupkg = Join-Path $directory 'Mono.Cecil.nupkg'
+    $assemblyPath = $directory, 'lib', 'net45', 'Mono.Cecil.dll' -Join '\'
+    
+    if (Test-Path $assemblyPath)
+    {
+        # Already added the ref, nothing to do here
+        return
+    }
+    
+    ri -Recurse -Force $directory 2>&1 | Out-Null
+    mkdir -f $directory
+    iwr $url -OutFile $nupkg
+    Extract-Nupkg $nupkg -Out $directory
+    Add-Type -Path $assemblyPath
 }
 
 cd $PSScriptRoot
