@@ -66,7 +66,7 @@ function Add-CecilReference
     }
     
     ri -Recurse -Force $directory 2>&1 | Out-Null
-    mkdir -f $directory
+    mkdir -f $directory | Out-Null # prevent this from being interpreted as a return value
     iwr $url -OutFile $nupkg
     Extract-Nupkg $nupkg -Out $directory
     Add-Type -Path $assemblyPath
