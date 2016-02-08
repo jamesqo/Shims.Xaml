@@ -43,32 +43,35 @@ function Load-Assembly($assembly)
         $e.ResolvedAssemblies.Add($assemblyClass::ReflectionOnlyLoadFrom($path))
     }
     
-    # Hook up the handlers
-    $domain.add_ReflectionOnlyAssemblyResolve($appDomainHandler)
-    $winmdClass::add_ReflectionOnlyNamespaceResolve($winmdHandler)
-    
     try
     {
         # Load it! (plain old dlls)
-        $assemblyObject = $assemblyClass::LoadFrom($assembly)
+        return $assemblyClass::LoadFrom($assembly)
     }
     catch
     {
-        # Load it again! (winmd components)
-        $assemblyObject = $assemblyClass::ReflectionOnlyLoadFrom($assembly)
+        # Hook up the handlers
+        $domain.add_ReflectionOnlyAssemblyResolve($appDomainHandler)
+        $winmdClass::add_ReflectionOnlyNamespaceResolve($winmdHandler)
+        
+        try
+        {
+            # Load it again! (winmd components)
+            return $assemblyClass::ReflectionOnlyLoadFrom($assembly)
+        }
+        finally
+        {
+            # Deregister the handlers
+            $domain.remove_ReflectionOnlyAssemblyResolve($appDomainHandler)
+            $winmdClass::remove_ReflectionOnlyNamespaceResolve($winmdHandler)
+        }
     }
-    
-    # Deregister the handlers
-    $domain.remove_ReflectionOnlyAssemblyResolve($appDomainHandler)
-    $winmdClass::remove_ReflectionOnlyNamespaceResolve($winmdHandler)
-    
-    return $assemblyObject
 }
 
 function Get-Namespaces($assembly)
 {
-    $assemblyObject = Load-Assembly $assembly
-    $types = $assemblyObject.GetTypes()
+    $loaded = Load-Assembly $assembly
+    $types = $loaded.GetTypes()
     return $types | ? IsPublic | select -ExpandProperty Namespace -Unique
 }
 
