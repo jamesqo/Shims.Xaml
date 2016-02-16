@@ -1,6 +1,6 @@
 ﻿{
 	"title": "Shims.Xaml",
-	"version": "1.6.0",
+	"version": "1.7.0",
 	"description": "Shims.Xaml lets you easily create libraries that work on WPF and Windows 10.\n\nFind us on GitHub at http://github.com/jamesqo/Shims.Xaml",
 	"authors": [ "James Ko" ],
 	"tags": [ "shims xaml shims.xaml xml markup wpf windows 10 winrt runtime mvvm data binding" ],
