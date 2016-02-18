@@ -12,14 +12,12 @@
 	"frameworks": {
 		"dotnet": {
 			"dependencies": {
-				"System.Runtime": "4.0.20",
-				"System.Runtime.InteropServices": "4.0.20"
+				"System.Runtime": "4.0.0"
 			}
 		},
-		".NETPortable,Version=v4.5,Profile=Profile111": {
+		".NETPortable,Version=v4.5,Profile=Profile259": {
 			"frameworkAssemblies": {
-				"System.Runtime": { "type": "build" },
-				"System.Runtime.InteropServices": { "type": "build" }
+				"System.Runtime": { "type": "build" }
 			}
 		}
 	}
